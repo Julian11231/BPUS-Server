@@ -8,15 +8,24 @@ var PasantiaSchema = new Schema({
     modalidad: { type: Schema.Types.ObjectId, required: true, ref: 'Modalidad' },
     empresa: { type: Schema.Types.ObjectId, required: false, ref: 'Empresa' },
     vacante: { type: Schema.Types.ObjectId, required: false, ref: 'Vacante' },
+    tutor: { type: Schema.Types.ObjectId, required: false, ref: 'Administrativo' },
+
     documento_propuesta: { type: String, required: false },
     estado_propuesta: { type: String, required: false },
+    notas_propuesta: { type: String, required: false },
+
     documento_informe7: { type: String, required: false },
     estado_informe7: { type: String, required: false },
+    notas_informe7: { type: String, required: false },
+
     documento_informe14: { type: String, required: false },
     estado_informe14: { type: String, required: false },
+    notas_informe14: { type: String, required: false },
+
     documento_informeFinal: { type: String, required: false },
     estado_informeFinal: { type: String, required: false },
-    tutor: { type: String, required: false },
+    notas_informeFinal: { type: String, required: false },
+
     notas: { type: String, required: false },
     estado: { type: String, required: true },
     fecha: { type: Date, required: false }

@@ -33,10 +33,14 @@ var programaRoute = require('./routes/programa');
 var gestPasantiaRoute = require('./routes/pasantia');
 var empresasRoute = require('./routes/empresa');
 var vacantesRoute = require('./routes/vacantes');
-//var uploadRoute = require('./routes/uploadImages');
+var uploadRoute = require('./routes/uploadFilePasantia');
+var sendRoute = require('./routes/sendFilePasantia');
+var tutoresRoute = require('./routes/tutores');
 
 // Rutas
-//app.use('/upload', uploadRoute);
+app.use('/tutores', tutoresRoute);
+app.use('/send_file_pasantia', sendRoute);
+app.use('/upload_pasantia', uploadRoute);
 app.use('/vacantes', vacantesRoute)
 app.use('/empresas', empresasRoute);
 app.use('/pasantia', gestPasantiaRoute);

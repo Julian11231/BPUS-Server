@@ -16,6 +16,7 @@ app.get('/', [mdAuth.VerificarToken, mdAuth.VerificarJefePrograma], (req, res) =
         .populate('modalidad')
         .populate('empresa')
         .populate('vacante')
+        .populate('tutor')
         .exec((err, pasantias) => {
 
             if (err) {
@@ -47,6 +48,7 @@ app.get('/:id', [mdAuth.VerificarToken], (req, res) => {
         .populate('estudiante')
         .populate('empresa')
         .populate('vacante')
+        .populate('tutor')
         .exec((err, pasantia) => {
 
             if (err) {
@@ -158,13 +160,19 @@ app.put('/:id', [mdAuth.VerificarToken], (req, res) => {
 
         } else {
 
-            /* ---------- CORREGIR -------------- */
-            pasantia.actividades = body.actividades;
-            pasantia.problema_proyecto = body.problema_proyecto;
-            pasantia.objetivos = body.objetivos;
-            pasantia.alcance = body.alcance;
-            pasantia.resultados_esperados = body.resultados_esperados;
-            pasantia.aporte_especifico = body.aporte_especifico;
+            pasantia.estado_propuesta = body.estado_propuesta
+            pasantia.notas_propuesta = body.notas_propuesta
+
+            pasantia.estado_informe7 = body.estado_informe7;
+            pasantia.notas_informe7 = body.notas_informe7;
+
+            pasantia.estado_informe14 = body.estado_informe14
+            pasantia.notas_informe14 = body.notas_informe14
+
+            pasantia.estado_informeFinal = body.estado_informeFinal
+            pasantia.notas_informeFinal = body.notas_informeFinal
+
+            pasantia.tutor = body.tutor;
             pasantia.notas = body.notas;
             pasantia.estado = body.estado;
 
