@@ -9,7 +9,7 @@ var mdAuth = require('../middlewares/autenticacion');
 //=====================================================
 //                   GET-PASANTIA
 //=====================================================
-app.get('/', [mdAuth.VerificarToken, mdAuth.VerificarJefePrograma], (req, res) => {
+app.get('/', [mdAuth.VerificarToken, /*mdAuth.VerificarJefePrograma, mdAuth.VerifyTutor*/], (req, res) => {
 
     Pasantia.find({})
         .populate('estudiante')

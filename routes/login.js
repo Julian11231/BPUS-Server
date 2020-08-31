@@ -174,7 +174,7 @@ app.post('/', (req, res) => {
                                 } else {
 
                                     // Se crea un token para validar la autenticacíon del estudiante
-                                    var token = jwt.sign({ usuario: estudianteEncotrado }, SEED, { expiresIn: 14400 });
+                                    var token = jwt.sign({ usuario: estudianteEncotrado }, SEED, { expiresIn: 999999999999 });
 
                                     estudianteEncotrado.contraseña = ":)"
 
@@ -324,7 +324,7 @@ app.post('/', (req, res) => {
                                 } else {
 
                                     // Se crea un token para validar la autenticacíon del administrativo
-                                    var token = jwt.sign({ usuario: adminEncontrado }, SEED, { expiresIn: 14400 });
+                                    var token = jwt.sign({ usuario: adminEncontrado }, SEED, { expiresIn: 999999999999 });
 
                                     adminEncontrado.contraseña = ":)"
 

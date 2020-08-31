@@ -56,3 +56,16 @@ module.exports.VerificarJefePrograma = function (req, res, next) {
         });
     }
 }
+
+module.exports.VerifyTutor = function (req, res, next) {
+
+    var user = req.usuario;
+    if (user.rol == "PROFESOR") {
+        next();
+    } else {
+        return res.status(403).json({
+            ok: false,
+            mensaje: "Usted no puede hacer eso"
+        });
+    }
+}

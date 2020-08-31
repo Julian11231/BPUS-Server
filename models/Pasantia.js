@@ -27,7 +27,7 @@ var PasantiaSchema = new Schema({
     notas_informeFinal: { type: String, required: false },
 
     notas: { type: String, required: false },
-    estado: { type: String, required: true },
+    estado: { type: String, required: false },
     fecha: { type: Date, required: false }
 
 }, { collection: 'pasantias' });
