@@ -8,6 +8,7 @@ var vacantesSchema = new Schema({
     descripcion: { type: String, required: true },
     empresa: { type: Schema.Types.ObjectId, ref: 'Empresa', required: true },
     programa: { type: Schema.Types.ObjectId, ref: 'Programa', required: true },
+    encargado: { type: Schema.Types.ObjectId, ref: 'EncargadoEmpresa', required: true },
     ubicacion: { type: String, required: true },
     modalidad: { type: String, required: true },
     cantidad: { type: Number, required: true },

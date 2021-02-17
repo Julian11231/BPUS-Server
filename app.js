@@ -36,8 +36,12 @@ var vacantesRoute = require('./routes/vacantes');
 var uploadRoute = require('./routes/uploadFilePasantia');
 var sendRoute = require('./routes/sendFilePasantia');
 var tutoresRoute = require('./routes/tutores');
+var encargadoEmpresaRoute = require('./routes/encargadoEmpresa');
+var convenioRoute = require('./routes/convenio');
 
 // Rutas
+app.use('/convenios', convenioRoute);
+app.use('/encargadoEmpresa', encargadoEmpresaRoute);
 app.use('/tutores', tutoresRoute);
 app.use('/send_file_pasantia', sendRoute);
 app.use('/upload_pasantia', uploadRoute);
@@ -50,21 +54,20 @@ app.use('/imagen', imagenRoute)
 app.use('/login', loginRoute);
 app.use('/', mainRoute);
 
-
-/*Conexión con mongo Atlas
-var UrlAtlas = "mongodb+srv://Admin:W7EhVSZtRhZQkxC8@cluster0-qtov4.mongodb.net/test?retryWrites=true&w=majority";
-mongoose.connect(UrlAtlas, (err, res) => {
-
-    if (err) {
+//const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://adminBPUS:gVo3Mnd39q7ErzmK@bpuscluster.be1do.mongodb.net/BPUS?retryWrites=true&w=majority";
+/*
+const client = new MongoClient(uri, { useNewUrlParser: true });
+client.connect((err) => {
+    if(err){
         throw err;
-    } else {
+    }else{
         console.log('Base de datos: \x1b[32m%s\x1b[0m', 'online');
     }
-});*/
+});
 
-
-// Conexión a la DB mongo Local
-mongoose.connection.openUri('mongodb://localhost:27017/BPUS', { useNewUrlParser: true, useUnifiedTopology: true },
+*/
+mongoose.connection.openUri(uri, { useNewUrlParser: true, useUnifiedTopology: true },
     (err, res) => {
 
         if (err) {
@@ -74,7 +77,6 @@ mongoose.connection.openUri('mongodb://localhost:27017/BPUS', { useNewUrlParser:
         }
 
     });
-
 
 app.listen(3000, () => {
     // Para cambiar el color de la palabra "online", se hace lo siguiente:

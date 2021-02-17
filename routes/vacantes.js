@@ -8,50 +8,44 @@ var mdAuth = require('../middlewares/autenticacion');
                     GET VACANTES
 =======================================================*/
 
-app.get('/', mdAuth.VerificarToken, (req, res) => {
-
-    Vacante.find({}).populate('empresa').populate('programa').exec((err, vacantes) => {
+app.get('/:encargado', mdAuth.VerificarToken, (req, res) => {
+    var encargado = req.params.encargado;
+    Vacante.find({encargado: encargado}).populate('encargado').populate('empresa').populate('programa').exec((err, vacantes) => {
 
         if (err) {
             res.status(500).json({
-
                 ok: true,
                 mensaje: 'Lo sentimos, ocurrió un error'
             });
-
         } else {
-
             res.status(200).json({
-
                 ok: true,
                 mensaje: 'Petición realizada correctamente',
                 vacantes: vacantes
             });
         }
-
     });
 });
 
 /* ====================================================
                     POST VACANTES
 =======================================================*/
-app.post('/', [mdAuth.VerificarToken, mdAuth.VerificarJefePrograma], (req, res) => {
+app.post('/', [mdAuth.VerificarToken, mdAuth.VerificarEncargado], (req, res) => {
 
     var body = req.body;
-    var titulo = body.titulo;
-
     var vacante = new Vacante({
 
-        titulo: titulo,
+        titulo: body.titulo,
         funciones: body.funciones,
         descripcion: body.descripcion,
         empresa: body.empresa,
         programa: body.programa,
+        encargado: body.encargado,
         ubicacion: body.ubicacion,
         modalidad: body.modalidad,
         cantidad: body.cantidad,
         pagada: body.pagada,
-        letra: titulo.substring(0, 1),
+        letra: body.titulo.substring(0, 1),
         estado: 'Activa'
 
     });
@@ -82,7 +76,7 @@ app.post('/', [mdAuth.VerificarToken, mdAuth.VerificarJefePrograma], (req, res) 
 /* ====================================================
                     PUT Vacantes
 =======================================================*/
-app.put('/:id', [mdAuth.VerificarToken, mdAuth.VerificarJefePrograma], (req, res) => {
+app.put('/:id', [mdAuth.VerificarToken, mdAuth.VerificarEncargado], (req, res) => {
 
     var body = req.body;
     var id = req.params.id;
@@ -114,6 +108,7 @@ app.put('/:id', [mdAuth.VerificarToken, mdAuth.VerificarJefePrograma], (req, res
             vacante.descripcion = body.descripcion;
             vacante.empresa = body.empresa;
             vacante.programa = body.programa;
+            vacante.encargado = body.encargado;
             vacante.ubicacion = body.ubicacion;
             vacante.modalidad = body.modalidad;
             vacante.cantidad = body.cantidad;
@@ -151,7 +146,7 @@ app.put('/:id', [mdAuth.VerificarToken, mdAuth.VerificarJefePrograma], (req, res
 /* ====================================================
                     DELETE VACANTE
 =======================================================*/
-app.delete('/:id', [mdAuth.VerificarToken, mdAuth.VerificarJefePrograma], (req, res) => {
+app.delete('/:id', [mdAuth.VerificarToken, mdAuth.VerificarEncargado], (req, res) => {
 
     var id = req.params.id;
 

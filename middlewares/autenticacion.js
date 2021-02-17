@@ -57,6 +57,19 @@ module.exports.VerificarJefePrograma = function (req, res, next) {
     }
 }
 
+module.exports.VerificarEncargado = function (req, res, next) {
+
+    var user = req.usuario;
+    if (user.rol == "EncargadoEmpresa") {
+        next();
+    } else {
+        return res.status(403).json({
+            ok: false,
+            mensaje: "Usted no puede hacer eso"
+        });
+    }
+}
+
 module.exports.VerifyTutor = function (req, res, next) {
 
     var user = req.usuario;
