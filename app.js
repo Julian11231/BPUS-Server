@@ -78,7 +78,4 @@ mongoose.connection.openUri(uri, { useNewUrlParser: true, useUnifiedTopology: tr
 
     });
 
-app.listen(3000, () => {
-    // Para cambiar el color de la palabra "online", se hace lo siguiente:
-    console.log('Corriendo en el puerto 3000: \x1b[32m%s\x1b[0m', 'online');
-});
+app.listen(process.env.PORT || 8080);
