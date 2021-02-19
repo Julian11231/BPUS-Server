@@ -4,25 +4,46 @@ var Convenio = require('../models/Convenio');
 var mdAuth = require('../middlewares/autenticacion');
 
 /* ====================================================
-                    GET Convenio
+            GET Convenio - jefe de programa
 =======================================================*/
 
-app.get('/:programa', mdAuth.VerificarToken, (req, res) => {
+app.get('/jefePrograma:programa', mdAuth.VerificarToken, (req, res) => {
 
     var programa = req.params.programa;
     Convenio.find({programa: programa}).populate('programa').populate('empresa').exec((err, convenios) => {
 
             if (err) {
                 res.status(500).json({
-
                     ok: true,
                     mensaje: 'Lo sentimos, ocurrió un error'
                 });
 
             } else {
-
                 res.status(200).json({
+                    ok: true,
+                    mensaje: 'Petición realizada correctamente',
+                    convenios: convenios
+                });
+            }
+        });
+});
 
+/* ====================================================
+            GET Convenio - jefe de programa
+=======================================================*/
+
+app.get('/', mdAuth.VerificarToken, (req, res) => {
+
+    Convenio.find({}).populate('programa').populate('empresa').exec((err, convenios) => {
+
+            if (err) {
+                res.status(500).json({
+                    ok: true,
+                    mensaje: 'Lo sentimos, ocurrió un error'
+                });
+
+            } else {
+                res.status(200).json({
                     ok: true,
                     mensaje: 'Petición realizada correctamente',
                     convenios: convenios
@@ -35,7 +56,7 @@ app.get('/:programa', mdAuth.VerificarToken, (req, res) => {
 /* ====================================================
                     POST Convenio
 =======================================================*/
-app.post('/', [mdAuth.VerificarToken, mdAuth.VerificarJefePrograma], (req, res) => {
+app.post('/', [mdAuth.VerificarToken], (req, res) => {
 
     var body = req.body;
     var convenio = new Convenio({

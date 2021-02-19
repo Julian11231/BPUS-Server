@@ -5,10 +5,10 @@ var Vacante = require('../models/Vacante');
 var mdAuth = require('../middlewares/autenticacion');
 
 /* ====================================================
-                    GET VACANTES
+                    GET VACANTES-ENCARGADO
 =======================================================*/
 
-app.get('/:encargado', mdAuth.VerificarToken, (req, res) => {
+app.get('/encargado:encargado', mdAuth.VerificarToken, (req, res) => {
     var encargado = req.params.encargado;
     Vacante.find({encargado: encargado}).populate('encargado').populate('empresa').populate('programa').exec((err, vacantes) => {
 
@@ -26,11 +26,54 @@ app.get('/:encargado', mdAuth.VerificarToken, (req, res) => {
         }
     });
 });
+/* ====================================================
+                    GET VACANTES-ESTUDIANTE
+=======================================================*/
 
+app.get('/estudiante:programa', mdAuth.VerificarToken, (req, res) => {
+    var programa = req.params.programa;
+    Vacante.find({programa: programa}).populate('encargado').populate('empresa').populate('programa').exec((err, vacantes) => {
+
+        if (err) {
+            res.status(500).json({
+                ok: true,
+                mensaje: 'Lo sentimos, ocurrió un error'
+            });
+        } else {
+            res.status(200).json({
+                ok: true,
+                mensaje: 'Petición realizada correctamente',
+                vacantes: vacantes
+            });
+        }
+    });
+});
+
+/* ====================================================
+                    GET VACANTES-ADMIN
+=======================================================*/
+
+app.get('/', mdAuth.VerificarToken, (req, res) => {
+    Vacante.find({}).populate('encargado').populate('empresa').populate('programa').exec((err, vacantes) => {
+
+        if (err) {
+            res.status(500).json({
+                ok: true,
+                mensaje: 'Lo sentimos, ocurrió un error'
+            });
+        } else {
+            res.status(200).json({
+                ok: true,
+                mensaje: 'Petición realizada correctamente',
+                vacantes: vacantes
+            });
+        }
+    });
+});
 /* ====================================================
                     POST VACANTES
 =======================================================*/
-app.post('/', [mdAuth.VerificarToken, mdAuth.VerificarEncargado], (req, res) => {
+app.post('/', [mdAuth.VerificarToken], (req, res) => {
 
     var body = req.body;
     var vacante = new Vacante({
@@ -76,7 +119,7 @@ app.post('/', [mdAuth.VerificarToken, mdAuth.VerificarEncargado], (req, res) => 
 /* ====================================================
                     PUT Vacantes
 =======================================================*/
-app.put('/:id', [mdAuth.VerificarToken, mdAuth.VerificarEncargado], (req, res) => {
+app.put('/:id', [mdAuth.VerificarToken], (req, res) => {
 
     var body = req.body;
     var id = req.params.id;
@@ -146,7 +189,7 @@ app.put('/:id', [mdAuth.VerificarToken, mdAuth.VerificarEncargado], (req, res) =
 /* ====================================================
                     DELETE VACANTE
 =======================================================*/
-app.delete('/:id', [mdAuth.VerificarToken, mdAuth.VerificarEncargado], (req, res) => {
+app.delete('/:id', [mdAuth.VerificarToken], (req, res) => {
 
     var id = req.params.id;
 
