@@ -14,7 +14,7 @@ app.get('/encargado:encargado', mdAuth.VerificarToken, (req, res) => {
 
         if (err) {
             res.status(500).json({
-                ok: true,
+                ok: false,
                 mensaje: 'Lo sentimos, ocurrió un error'
             });
         } else {
@@ -36,7 +36,7 @@ app.get('/estudiante:programa', mdAuth.VerificarToken, (req, res) => {
 
         if (err) {
             res.status(500).json({
-                ok: true,
+                ok: false,
                 mensaje: 'Lo sentimos, ocurrió un error'
             });
         } else {
@@ -58,7 +58,7 @@ app.get('/', mdAuth.VerificarToken, (req, res) => {
 
         if (err) {
             res.status(500).json({
-                ok: true,
+                ok: false,
                 mensaje: 'Lo sentimos, ocurrió un error'
             });
         } else {

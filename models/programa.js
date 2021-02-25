@@ -7,7 +7,8 @@ var Schema = mongoose.Schema;
 var programaSchema = new Schema({
 
     nombre: { type: String, required: true },
-    creditos_totales: { type: Number, required: true }
+    creditos_totales: { type: Number, required: true },
+    jefe: { type: Schema.Types.ObjectId, required: true, ref: 'Administrativo'}
 
 }, { collection: 'programas' });
 

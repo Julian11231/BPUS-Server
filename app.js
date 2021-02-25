@@ -12,7 +12,7 @@ var app = express();
 
 // Middleware de Cors
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "https://safe-bayou-56920.herokuapp.com");
+    res.header("Access-Control-Allow-Origin", "https://safe-bayou-56920.herokuapp.com "); // https://safe-bayou-56920.herokuapp.com  - http://localhost:4200
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
     next();
@@ -38,8 +38,10 @@ var sendRoute = require('./routes/sendFilePasantia');
 var tutoresRoute = require('./routes/tutores');
 var encargadoEmpresaRoute = require('./routes/encargadoEmpresa');
 var convenioRoute = require('./routes/convenio');
+var notificacionesRoute = require('./routes/notificacion');
 
 // Rutas
+app.use('/notificaciones', notificacionesRoute);
 app.use('/convenios', convenioRoute);
 app.use('/encargadoEmpresa', encargadoEmpresaRoute);
 app.use('/tutores', tutoresRoute);

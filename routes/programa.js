@@ -11,7 +11,7 @@ app.get('/:id', (req, res) => {
     var id = req.params.id;
 
     // Buscamos el programa por id
-    Programa.findById(id, (err, programa) => {
+    Programa.findById(id).populate('jefe').exec((err, programa)=> { 
 
         // Si hay un error...
         if (err) {
