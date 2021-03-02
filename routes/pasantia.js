@@ -15,7 +15,7 @@ app.get('/', [mdAuth.VerificarToken, /*mdAuth.VerificarJefePrograma, mdAuth.Veri
         .populate('estudiante')
         .populate('modalidad')
         .populate('empresa')
-        .populate('vacante')
+        .populate({path: 'vacante', populate: { path: 'encargado' } })
         .populate('tutor')
         .exec((err, pasantias) => {
 

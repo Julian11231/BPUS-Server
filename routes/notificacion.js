@@ -102,10 +102,15 @@ app.post('/correo', [mdAuth.VerificarToken], (req, res) => {
     transporter.verify(function(error, success) {
         if (error) {
         console.log(error);
+        res.status(500).json({
+            ok: false,
+            mensaje: 'Lo sentimos, ocurrió un error',
+            err: err
+        });
         } else {
             var mailOptions = {
-                from: 'u20161146030@usco.edu.co',
-                to: 'julian19896@gmail.com',
+                from: 'juan.quintero.test@gmail.com',
+                to: 'u20161146030@usco.edu.co',
                 subject: body.mensaje,
                 text: body.mensajeDetalle
             };
@@ -113,8 +118,17 @@ app.post('/correo', [mdAuth.VerificarToken], (req, res) => {
             transporter.sendMail(mailOptions, function(error, info){
             if (error) {
                 console.log(error);
+                res.status(500).json({
+                    ok: false,
+                    mensaje: 'No se pudo enviar el correo',
+                    err: err
+                });
             } else {
                 console.log('Email sent: ' + info.response);
+                res.status(200).json({
+                    ok: true,
+                    mensaje: 'Correro envidado exitosamente',
+                });
             }
             });
         }
