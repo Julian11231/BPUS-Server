@@ -11,7 +11,7 @@ var mdAuth = require('../middlewares/autenticacion');
 //=====================================================
 app.get('/', [mdAuth.VerificarToken, /*mdAuth.VerificarJefePrograma, mdAuth.VerifyTutor*/], (req, res) => {
 
-    Pasantia.find({})
+    Pasantia.find({'modalidad': '5eb57a1f54d7ac345dc39ca5', 'estado': 'Enviada',})
         .populate('estudiante')
         .populate('modalidad')
         .populate('empresa')
@@ -20,13 +20,11 @@ app.get('/', [mdAuth.VerificarToken, /*mdAuth.VerificarJefePrograma, mdAuth.Veri
         .exec((err, pasantias) => {
 
             if (err) {
-
                 res.status(500).json({
                     ok: false,
                     mensaje: 'Lo sentimos, ha ocurrido un error'
                 });
             } else {
-
                 res.status(200).json({
                     ok: true,
                     mensaje: 'Petición realizada correctamente',
@@ -36,6 +34,58 @@ app.get('/', [mdAuth.VerificarToken, /*mdAuth.VerificarJefePrograma, mdAuth.Veri
         });
 });
 
+app.get('/tutor:tutor', [mdAuth.VerificarToken, /*mdAuth.VerificarJefePrograma, mdAuth.VerifyTutor*/], (req, res) => {
+    var tutor = req.params.tutor;
+    Pasantia.find({'modalidad': '5eb57a1f54d7ac345dc39ca5', tutor: tutor})
+        .populate('estudiante')
+        .populate('modalidad')
+        .populate('empresa')
+        .populate({path: 'vacante', populate: { path: 'encargado' } })
+        .populate('tutor')
+        .exec((err, pasantias) => {
+
+            if (err) {
+                res.status(500).json({
+                    ok: false,
+                    mensaje: 'Lo sentimos, ha ocurrido un error'
+                });
+            } else {
+                res.status(200).json({
+                    ok: true,
+                    mensaje: 'Petición realizada correctamente',
+                    pasantias: pasantias
+                });
+            }
+        });
+});
+
+//=====================================================
+//                   GET-PASANTIA POR Empresa
+//=====================================================
+app.get('/empresa:empresa', [mdAuth.VerificarToken, /*mdAuth.VerificarJefePrograma, mdAuth.VerifyTutor*/], (req, res) => {
+    var idempresa = req.params.empresa;
+    Pasantia.find({'empresa': idempresa, 'estado': "PreInscrita", 'aprobacionEmpresa': false})
+        .populate('estudiante')
+        .populate('modalidad')
+        .populate('empresa')
+        .populate({path: 'vacante', populate: { path: 'encargado' } })
+        .populate('tutor')
+        .exec((err, pasantias) => {
+
+            if (err) {
+                res.status(500).json({
+                    ok: false,
+                    mensaje: 'Lo sentimos, ha ocurrido un error'
+                });
+            } else {
+                res.status(200).json({
+                    ok: true,
+                    mensaje: 'Petición realizada correctamente',
+                    pasantias: pasantias
+                });
+            }
+        });
+});
 
 //=====================================================
 //                   GET-PASANTIA POR ID
@@ -47,8 +97,9 @@ app.get('/:id', [mdAuth.VerificarToken], (req, res) => {
     Pasantia.findById(id)
         .populate('estudiante')
         .populate('empresa')
-        .populate('vacante')
+        .populate({path: 'vacante', populate: { path: 'encargado' } })
         .populate('tutor')
+        .populate('modalidad')
         .exec((err, pasantia) => {
 
             if (err) {
@@ -76,8 +127,59 @@ app.get('/:id', [mdAuth.VerificarToken], (req, res) => {
         });
 });
 
+//=====================================================
+//       PUT - PASANTIA- CAMBIAR ESTADO ENCARGADO
+//=====================================================
+app.put('/cambiarEstado:idEstudiante', [mdAuth.VerificarToken, mdAuth.VerificarEncargado], (req, res) => {
 
+    var estado = req.query.estado;
+    console.log(estado);
+    var id = req.params.idEstudiante;
+    console.log(id);
 
+    Pasantia.findById(id, (err, pasantia) => {
+
+        if (err) {
+            res.status(500).json({
+
+                ok: false,
+                mensaje: 'Lo sentimos, ocurrió un error',
+                err: err
+            });
+
+        } else if (!pasantia) {
+
+            res.status(400).json({
+
+                ok: false,
+                mensaje: 'No se encontró ninguna solicitud',
+                err: err
+            });
+
+        } else {
+
+            pasantia.aprobacionEmpresa = estado;
+
+            pasantia.save((err, pasantiaActualizada) => {
+
+                if (err) {
+                    res.status(500).json({
+                        ok: false,
+                        mensaje: 'Lo sentimos, ocurrió un error',
+                        err: err
+                    });
+
+                } else {
+                    res.status(200).json({
+                        ok: true,
+                        mensaje: 'Petición realizada correctamente',
+                        pasantiaActualizada: pasantiaActualizada
+                    });
+                }
+            });
+        }
+    });
+});
 
 //=====================================================
 //                   POST-PASANTIA
@@ -95,7 +197,7 @@ app.post('/:idEstudiante', [mdAuth.VerificarToken, mdAuth.VerificarEstudiante], 
         modalidad: "5eb57a1f54d7ac345dc39ca5",
         empresa: body.empresa,
         vacante: body.vacante,
-        estado: 'Enviada',
+        estado: 'PreInscrita',
         fecha: Date.now()
 
     });
@@ -129,15 +231,15 @@ app.post('/:idEstudiante', [mdAuth.VerificarToken, mdAuth.VerificarEstudiante], 
         }
     });
 });
-
-
 /* ====================================================
                     PUT PASANTIA
 =======================================================*/
 app.put('/:id', [mdAuth.VerificarToken], (req, res) => {
 
     var body = req.body;
+    console.log(body);
     var id = req.params.id;
+    console.log(id);
 
     Pasantia.findById(id, (err, pasantia) => {
 
@@ -173,7 +275,6 @@ app.put('/:id', [mdAuth.VerificarToken], (req, res) => {
             pasantia.notas_informeFinal = body.notas_informeFinal
 
             pasantia.tutor = body.tutor;
-            pasantia.notas = body.notas;
             pasantia.estado = body.estado;
 
             pasantia.save((err, pasantiaActualizada) => {

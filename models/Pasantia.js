@@ -6,11 +6,13 @@ var PasantiaSchema = new Schema({
 
     estudiante: { type: Schema.Types.ObjectId, required: true, ref: 'Estudiante', unique: true },
     modalidad: { type: Schema.Types.ObjectId, required: true, ref: 'Modalidad' },
+    aprobacionEmpresa: { type: Boolean, required: true, default: false },
     empresa: { type: Schema.Types.ObjectId, required: false, ref: 'Empresa' },
     vacante: { type: Schema.Types.ObjectId, required: false, ref: 'Vacante' },
     tutor: { type: Schema.Types.ObjectId, required: false, ref: 'Administrativo' },
 
     documento_propuesta: { type: String, required: false },
+    documento_fichaAcademica: { type: String, required: false },
     estado_propuesta: { type: String, required: false },
     notas_propuesta: { type: String, required: false },
 
@@ -26,7 +28,6 @@ var PasantiaSchema = new Schema({
     estado_informeFinal: { type: String, required: false },
     notas_informeFinal: { type: String, required: false },
 
-    notas: { type: String, required: false },
     estado: { type: String, required: false },
     fecha: { type: Date, required: false }
 

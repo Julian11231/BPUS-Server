@@ -17,7 +17,30 @@ app.put('/:idEstudiante', [mdAuth.VerificarToken], (req, res) => {
         var documento_propuesta = req.files.documento_propuesta;
         var documentoPropuesta = setDocumento(documento_propuesta, "documento_propuesta", id_estudiante, res);
         Pasantia.findOneAndUpdate({ estudiante: id_estudiante },
-            { documento_propuesta: documentoPropuesta, estado_propuesta: "Enviada", notas_propuesta: "Enviado Correctamente" },
+            { documento_propuesta: documentoPropuesta, estado: "Enviada", estado_propuesta: "Enviada", notas_propuesta: "Enviado Correctamente" },
+            (err, pasantiaAct) => {
+                if (err) {
+                    res.status(500).json({
+                        ok: false,
+                        mensaje: "Lo sentimos, hubo un error al almacenar el documento",
+                        error: err
+                    });
+                } else {
+                    res.status(200).json({
+                        ok: true,
+                        pasantia: pasantiaAct
+                    });
+                }
+            });
+    }
+
+    if (!req.files.documento_fichaAcademica) {
+        console.log("lol")
+    } else {
+        var documento_fichaAcademica = req.files.documento_fichaAcademica;
+        var documentofichaAcademica = setDocumento(documento_fichaAcademica, "documento_fichaAcademica", id_estudiante, res);
+        Pasantia.findOneAndUpdate({ estudiante: id_estudiante },
+            { documento_fichaAcademica: documentofichaAcademica, estado: "Enviada", estado_propuesta: "Enviada", notas_propuesta: "Enviado Correctamente" },
             (err, pasantiaAct) => {
                 if (err) {
                     res.status(500).json({
